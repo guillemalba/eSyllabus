@@ -5,12 +5,12 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="eSyllabus"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".subjectsActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="edu.salleurl.esyllabus.subjectsActivity"></activity>
+        <activity android:name="edu.salleurl.esyllabus.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

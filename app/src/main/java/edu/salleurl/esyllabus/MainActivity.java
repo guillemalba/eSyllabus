@@ -8,12 +8,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFS = "sharedPrefs";
-    int myBlue = Color.parseColor("#63AFED");
-    int myRed = Color.parseColor("#DA0000");
+    //int myBlue = Color.parseColor("#63AFED");
+    //int myBlue = Color.parseColor("#3344ff");
+    /*int myBlue = Color.parseColor("#0780fe");*/
+    /*int myBlue = Color.parseColor("#C7C7C3");*/
+    int myBlue = Color.parseColor("#4D93E8");
+    /*int myBlue = Color.WHITE;*/
+
+
+    //int myRed = Color.parseColor("#DA0000");
+    /*int myRed = Color.parseColor("#b30000");*/
+    int myRed = Color.YELLOW;
+
+    //int myGreen = Color.GREEN;
+    int myGreen = Color.parseColor("#00e600");
+
 
     int numGreen;
     int numRed;
@@ -25,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor save;
+
+    private Button btnReset;
 
     // Primer
     int countCalcul;
@@ -80,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
     int countMarketing;
     int countMarketingSimu;
     int count_iOS;
-    int count_other;
+    int count_paed;
+    int count_intensiProg;
 
     // Primer
     private Button btnCalcul;
@@ -136,11 +153,13 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMarketing;
     private Button btnMarketingSimu;
     private Button btn_iOS;
-    private Button btnOther;
+    private Button btnPaed;
+    private Button btnIntensiProg;
 
     public int saveCount(int counter, String btnName) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         if (counter == 3) {
             counter = 0;
         }
@@ -153,36 +172,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchOnClicked(Button btn, int counter) {
-        switch (counter) {
-            case 1:
-                btn.setBackgroundColor(myRed);
-                if (numGreen != 0) {
-                    numGreen -= Integer.parseInt(btn.getContentDescription().toString());
-                }
-                numRed += Integer.parseInt(btn.getContentDescription().toString());
-                break;
-            case 2:
-                btn.setBackgroundColor(myBlue);
-                if (numRed != 0) {
-                    numRed -= Integer.parseInt(btn.getContentDescription().toString());
-                }
-                numBlue += Integer.parseInt(btn.getContentDescription().toString());
-                break;
-            case 3:
-                btn.setBackgroundColor(Color.GREEN);
-                if (numBlue != 0) {
-                    numBlue -= Integer.parseInt(btn.getContentDescription().toString());
-                }
-                numGreen += Integer.parseInt(btn.getContentDescription().toString());
 
-                break;
-            default:
+        if (counter == 0) {
+            btn.setBackgroundColor(myRed);
+            numRed += Integer.parseInt(btn.getContentDescription().toString());
+            counter++;
+        } else {
+            switch (counter) {
+                case 1:
+                    btn.setBackgroundColor(myRed);
+                    if (numGreen != 0) {
+                        numGreen -= Integer.parseInt(btn.getContentDescription().toString());
+                    }
+                    numRed += Integer.parseInt(btn.getContentDescription().toString());
+                    break;
+                case 2:
+                    btn.setBackgroundColor(myBlue);
+                    if (numRed != 0) {
+                        numRed -= Integer.parseInt(btn.getContentDescription().toString());
+                    }
+                    numBlue += Integer.parseInt(btn.getContentDescription().toString());
+                    break;
+                case 3:
+                    btn.setBackgroundColor(myGreen);
+                    if (numBlue != 0) {
+                        numBlue -= Integer.parseInt(btn.getContentDescription().toString());
+                    }
+                    numGreen += Integer.parseInt(btn.getContentDescription().toString());
+
+                    break;
+                default:
                 /*
                 numGreen = 0;
                 numRed = 0;
                 numBlue = 240;
                  */
-                break;
+                    break;
+            }
         }
 
         System.out.println("numGreen: " + numGreen);
@@ -194,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
         save.putInt("blue", numBlue);
         save.apply();
 
-        tvRed.setText("Doing(" + numRed + ")");
-        tvGreen.setText("Done(" + numGreen + ")");
-        tvBlue.setText("Todo(" + numBlue + ")");
+        tvRed.setText("" + numRed + "");
+        tvBlue.setText("" + numBlue + "");
+        tvGreen.setText("" + numGreen + "");
     }
 
     public int getCount(int counter, String btnName) {
@@ -212,9 +238,10 @@ public class MainActivity extends AppCompatActivity {
                 btn.setBackgroundColor(myBlue);
                 break;
             case 3:
-                btn.setBackgroundColor(Color.GREEN);
+                btn.setBackgroundColor(myGreen);
                 break;
             default:
+                btn.setBackgroundColor(Color.WHITE);
                 break;
         }
     }
@@ -228,6 +255,10 @@ public class MainActivity extends AppCompatActivity {
         tvGreen = (TextView) findViewById(R.id.tvgreen);
         tvBlue = (TextView) findViewById(R.id.tvblue);
 
+        tvRed.setTextColor(myRed);
+        tvGreen.setTextColor(myGreen);
+        tvBlue.setTextColor(myBlue);
+
         numRed = getCount(numRed, "red");
         numGreen = getCount(numGreen, "green");
         numBlue = getCount(numBlue, "blue");
@@ -235,9 +266,9 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         save = sharedPreferences.edit();
 
-        tvRed.setText("Doing(" + numRed + ")");
-        tvGreen.setText("Done(" + numGreen + ")");
-        tvBlue.setText("Todo(" + numBlue + ")");
+        tvRed.setText("" + numRed + "");
+        tvGreen.setText("" + numGreen + "");
+        tvBlue.setText("" + numBlue + "");
 
         btnCalcul = (Button) findViewById(R.id.calcul);
         btnElectro = (Button) findViewById(R.id.electro);
@@ -253,8 +284,13 @@ public class MainActivity extends AppCompatActivity {
         btnCalcul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countCalcul = saveCount(countCalcul, "calcul");
-                switchOnClicked(btnCalcul, countCalcul);
+                if (countCalcul != 0) {
+                    countCalcul = saveCount(countCalcul, "calcul");
+                    switchOnClicked(btnCalcul, countCalcul);
+                } else {
+                    switchOnClicked(btnCalcul, countCalcul);
+                    countCalcul = saveCount(countCalcul, "calcul");
+                }
             }
         });
 
@@ -263,8 +299,13 @@ public class MainActivity extends AppCompatActivity {
         btnElectro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countElectro = saveCount(countElectro, "electro");
-                switchOnClicked(btnElectro, countElectro);
+                if (countElectro != 0) {
+                    countElectro = saveCount(countElectro, "electro");
+                    switchOnClicked(btnElectro, countElectro);
+                } else {
+                    switchOnClicked(btnElectro, countElectro);
+                    countElectro = saveCount(countElectro, "electro");
+                }
             }
         });
 
@@ -273,8 +314,13 @@ public class MainActivity extends AppCompatActivity {
         btnProg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countProg = saveCount(countProg, "prog");
-                switchOnClicked(btnProg, countProg);
+                if (countProg != 0) {
+                    countProg = saveCount(countProg, "prog");
+                    switchOnClicked(btnProg, countProg);
+                } else {
+                    switchOnClicked(btnProg, countProg);
+                    countProg = saveCount(countProg, "prog");
+                }
             }
         });
 
@@ -283,8 +329,13 @@ public class MainActivity extends AppCompatActivity {
         btnAlgebra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countAlgebra = saveCount(countAlgebra, "algebra");
-                switchOnClicked(btnAlgebra, countAlgebra);
+                if (countAlgebra != 0) {
+                    countAlgebra = saveCount(countAlgebra, "algebra");
+                    switchOnClicked(btnAlgebra, countAlgebra);
+                } else {
+                    switchOnClicked(btnAlgebra, countAlgebra);
+                    countAlgebra = saveCount(countAlgebra, "algebra");
+                }
             }
         });
 
@@ -293,8 +344,13 @@ public class MainActivity extends AppCompatActivity {
         btnIO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countIO = saveCount(countIO, "io");
-                switchOnClicked(btnIO, countIO);
+                if (countIO != 0) {
+                    countIO = saveCount(countIO, "io");
+                    switchOnClicked(btnIO, countIO);
+                } else {
+                    switchOnClicked(btnIO, countIO);
+                    countIO = saveCount(countIO, "io");
+                }
             }
         });
 
@@ -303,8 +359,13 @@ public class MainActivity extends AppCompatActivity {
         btnBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countBusiness = saveCount(countBusiness, "business");
-                switchOnClicked(btnBusiness, countBusiness);
+                if (countBusiness != 0) {
+                    countBusiness = saveCount(countBusiness, "business");
+                    switchOnClicked(btnBusiness, countBusiness);
+                } else {
+                    switchOnClicked(btnBusiness, countBusiness);
+                    countBusiness = saveCount(countBusiness, "business");
+                }
             }
         });
 
@@ -313,8 +374,13 @@ public class MainActivity extends AppCompatActivity {
         btnDiu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countDiu = saveCount(countDiu, "diu");
-                switchOnClicked(btnDiu, countDiu);
+                if (countDiu != 0) {
+                    countDiu = saveCount(countDiu, "diu");
+                    switchOnClicked(btnDiu, countDiu);
+                } else {
+                    switchOnClicked(btnDiu, countDiu);
+                    countDiu = saveCount(countDiu, "diu");
+                }
             }
         });
 
@@ -323,8 +389,13 @@ public class MainActivity extends AppCompatActivity {
         btnPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPic = saveCount(countPic, "pic");
-                switchOnClicked(btnPic, countPic);
+                if (countPic != 0) {
+                    countPic = saveCount(countPic, "pic");
+                    switchOnClicked(btnPic, countPic);
+                } else {
+                    switchOnClicked(btnPic, countPic);
+                    countPic = saveCount(countPic, "pic");
+                }
             }
         });
 
@@ -346,8 +417,13 @@ public class MainActivity extends AppCompatActivity {
         btnMates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countMates = saveCount(countMates, "mates");
-                switchOnClicked(btnMates, countMates);
+                if (countMates != 0) {
+                    countMates = saveCount(countMates, "mates");
+                    switchOnClicked(btnMates, countMates);
+                } else {
+                    switchOnClicked(btnMates, countMates);
+                    countMates = saveCount(countMates, "mates");
+                }
             }
         });
 
@@ -356,8 +432,13 @@ public class MainActivity extends AppCompatActivity {
         btnTrans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countTrans = saveCount(countTrans, "trans");
-                switchOnClicked(btnTrans, countTrans);
+                if (countTrans != 0) {
+                    countTrans = saveCount(countTrans, "trans");
+                    switchOnClicked(btnTrans, countTrans);
+                } else {
+                    switchOnClicked(btnTrans, countTrans);
+                    countTrans = saveCount(countTrans, "trans");
+                }
             }
         });
 
@@ -366,8 +447,13 @@ public class MainActivity extends AppCompatActivity {
         btnDpoo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countDpoo = saveCount(countDpoo, "dpoo");
-                switchOnClicked(btnDpoo, countDpoo);
+                if (countDpoo != 0) {
+                    countDpoo = saveCount(countDpoo, "dpoo");
+                    switchOnClicked(btnDpoo, countDpoo);
+                } else {
+                    switchOnClicked(btnDpoo, countDpoo);
+                    countDpoo = saveCount(countDpoo, "dpoo");
+                }
             }
         });
 
@@ -376,8 +462,13 @@ public class MainActivity extends AppCompatActivity {
         btnBases.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countBases = saveCount(countBases, "bases");
-                switchOnClicked(btnBases, countBases);
+                if (countBases != 0) {
+                    countBases = saveCount(countBases, "bases");
+                    switchOnClicked(btnBases, countBases);
+                } else {
+                    switchOnClicked(btnBases, countBases);
+                    countBases = saveCount(countBases, "bases");
+                }
             }
         });
 
@@ -386,8 +477,13 @@ public class MainActivity extends AppCompatActivity {
         btnDiu2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countDiu2 = saveCount(countDiu2, "diu2");
-                switchOnClicked(btnDiu2, countDiu2);
+                if (countDiu2 != 0) {
+                    countDiu2 = saveCount(countDiu2, "diu2");
+                    switchOnClicked(btnDiu2, countDiu2);
+                } else {
+                    switchOnClicked(btnDiu2, countDiu2);
+                    countDiu2 = saveCount(countDiu2, "diu2");
+                }
             }
         });
 
@@ -396,8 +492,13 @@ public class MainActivity extends AppCompatActivity {
         btnLlenguatge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countLlenguatge = saveCount(countLlenguatge, "llenguatge");
-                switchOnClicked(btnLlenguatge, countLlenguatge);
+                if (countLlenguatge != 0) {
+                    countLlenguatge = saveCount(countLlenguatge, "llenguatge");
+                    switchOnClicked(btnLlenguatge, countLlenguatge);
+                } else {
+                    switchOnClicked(btnLlenguatge, countLlenguatge);
+                    countLlenguatge = saveCount(countLlenguatge, "llenguatge");
+                }
             }
         });
 
@@ -406,8 +507,13 @@ public class MainActivity extends AppCompatActivity {
         btnAnimacio3d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countAnimacio3d = saveCount(countAnimacio3d, "animacio3d");
-                switchOnClicked(btnAnimacio3d, countAnimacio3d);
+                if (countAnimacio3d != 0) {
+                    countAnimacio3d = saveCount(countAnimacio3d, "animacio3d");
+                    switchOnClicked(btnAnimacio3d, countAnimacio3d);
+                } else {
+                    switchOnClicked(btnAnimacio3d, countAnimacio3d);
+                    countAnimacio3d = saveCount(countAnimacio3d, "animacio3d");
+                }
             }
         });
 
@@ -416,8 +522,13 @@ public class MainActivity extends AppCompatActivity {
         btnPic2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPic2 = saveCount(countPic2, "pic2");
-                switchOnClicked(btnPic2, countPic2);
+                if (countPic2 != 0) {
+                    countPic2 = saveCount(countPic2, "pic2");
+                    switchOnClicked(btnPic2, countPic2);
+                } else {
+                    switchOnClicked(btnPic2, countPic2);
+                    countPic2 = saveCount(countPic2, "pic2");
+                }
             }
         });
 
@@ -426,8 +537,13 @@ public class MainActivity extends AppCompatActivity {
         btnValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countValue = saveCount(countValue, "value");
-                switchOnClicked(btnValue, countValue);
+                if (countValue != 0) {
+                    countValue = saveCount(countValue, "value");
+                    switchOnClicked(btnValue, countValue);
+                } else {
+                    switchOnClicked(btnValue, countValue);
+                    countValue = saveCount(countValue, "value");
+                }
             }
         });
 
@@ -436,8 +552,13 @@ public class MainActivity extends AppCompatActivity {
         btnGrafics3d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countGrafics3d = saveCount(countGrafics3d, "grafics3d");
-                switchOnClicked(btnGrafics3d, countGrafics3d);
+                if (countGrafics3d != 0) {
+                    countGrafics3d = saveCount(countGrafics3d, "grafics3d");
+                    switchOnClicked(btnGrafics3d, countGrafics3d);
+                } else {
+                    switchOnClicked(btnGrafics3d, countGrafics3d);
+                    countGrafics3d = saveCount(countGrafics3d, "grafics3d");
+                }
             }
         });
 
@@ -446,8 +567,13 @@ public class MainActivity extends AppCompatActivity {
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countFoto = saveCount(countFoto, "foto");
-                switchOnClicked(btnFoto, countFoto);
+                if (countFoto != 0) {
+                    countFoto = saveCount(countFoto, "foto");
+                    switchOnClicked(btnFoto, countFoto);
+                } else {
+                    switchOnClicked(btnFoto, countFoto);
+                    countFoto = saveCount(countFoto, "foto");
+                }
             }
         });
 
@@ -456,8 +582,13 @@ public class MainActivity extends AppCompatActivity {
         btnExpressio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countExpressio = saveCount(countExpressio, "expressio");
-                switchOnClicked(btnExpressio, countExpressio);
+                if (countExpressio != 0) {
+                    countExpressio = saveCount(countExpressio, "expressio");
+                    switchOnClicked(btnExpressio, countExpressio);
+                } else {
+                    switchOnClicked(btnExpressio, countExpressio);
+                    countExpressio = saveCount(countExpressio, "expressio");
+                }
             }
         });
 
@@ -479,8 +610,13 @@ public class MainActivity extends AppCompatActivity {
         btnXarxes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countXarxes = saveCount(countXarxes, "xarxes");
-                switchOnClicked(btnXarxes, countXarxes);
+                if (countXarxes != 0) {
+                    countXarxes = saveCount(countXarxes, "xarxes");
+                    switchOnClicked(btnXarxes, countXarxes);
+                } else {
+                    switchOnClicked(btnXarxes, countXarxes);
+                    countXarxes = saveCount(countXarxes, "xarxes");
+                }
             }
         });
 
@@ -489,8 +625,13 @@ public class MainActivity extends AppCompatActivity {
         btnPmm1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPmm1 = saveCount(countPmm1, "pmm1");
-                switchOnClicked(btnPmm1, countPmm1);
+                if (countPmm1 != 0) {
+                    countPmm1 = saveCount(countPmm1, "pmm1");
+                    switchOnClicked(btnPmm1, countPmm1);
+                } else {
+                    switchOnClicked(btnPmm1, countPmm1);
+                    countPmm1 = saveCount(countPmm1, "pmm1");
+                }
             }
         });
 
@@ -499,8 +640,13 @@ public class MainActivity extends AppCompatActivity {
         btnPic3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPic3 = saveCount(countPic3, "pic3");
-                switchOnClicked(btnPic3, countPic3);
+                if (countPic3 != 0) {
+                    countPic3 = saveCount(countPic3, "pic3");
+                    switchOnClicked(btnPic3, countPic3);
+                } else {
+                    switchOnClicked(btnPic3, countPic3);
+                    countPic3 = saveCount(countPic3, "pic3");
+                }
             }
         });
 
@@ -509,8 +655,13 @@ public class MainActivity extends AppCompatActivity {
         btnTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countTv = saveCount(countTv, "tv");
-                switchOnClicked(btnTv, countTv);
+                if (countTv != 0) {
+                    countTv = saveCount(countTv, "tv");
+                    switchOnClicked(btnTv, countTv);
+                } else {
+                    switchOnClicked(btnTv, countTv);
+                    countTv = saveCount(countTv, "tv");
+                }
             }
         });
 
@@ -519,8 +670,13 @@ public class MainActivity extends AppCompatActivity {
         btnPw1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPw1 = saveCount(countPw1, "pw1");
-                switchOnClicked(btnPw1, countPw1);
+                if (countPw1 != 0) {
+                    countPw1 = saveCount(countPw1, "pw1");
+                    switchOnClicked(btnPw1, countPw1);
+                } else {
+                    switchOnClicked(btnPw1, countPw1);
+                    countPw1 = saveCount(countPw1, "pw1");
+                }
             }
         });
 
@@ -529,8 +685,13 @@ public class MainActivity extends AppCompatActivity {
         btnPds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPds = saveCount(countPds, "pds");
-                switchOnClicked(btnPds, countPds);
+                if (countPds != 0) {
+                    countPds = saveCount(countPds, "pds");
+                    switchOnClicked(btnPds, countPds);
+                } else {
+                    switchOnClicked(btnPds, countPds);
+                    countPds = saveCount(countPds, "pds");
+                }
             }
         });
 
@@ -539,8 +700,13 @@ public class MainActivity extends AppCompatActivity {
         btnDramaturgia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countDramaturgia = saveCount(countDramaturgia, "dramaturgia");
-                switchOnClicked(btnDramaturgia, countDramaturgia);
+                if (countDramaturgia != 0) {
+                    countDramaturgia = saveCount(countDramaturgia, "dramaturgia");
+                    switchOnClicked(btnDramaturgia, countDramaturgia);
+                } else {
+                    switchOnClicked(btnDramaturgia, countDramaturgia);
+                    countDramaturgia = saveCount(countDramaturgia, "dramaturgia");
+                }
             }
         });
 
@@ -549,8 +715,13 @@ public class MainActivity extends AppCompatActivity {
         btnSimulaciofisica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countSimulaciofisica = saveCount(countSimulaciofisica, "simulaciofisica");
-                switchOnClicked(btnSimulaciofisica, countSimulaciofisica);
+                if (countSimulaciofisica != 0) {
+                    countSimulaciofisica = saveCount(countSimulaciofisica, "simulaciofisica");
+                    switchOnClicked(btnSimulaciofisica, countSimulaciofisica);
+                } else {
+                    switchOnClicked(btnSimulaciofisica, countSimulaciofisica);
+                    countSimulaciofisica = saveCount(countSimulaciofisica, "simulaciofisica");
+                }
             }
         });
 
@@ -559,8 +730,13 @@ public class MainActivity extends AppCompatActivity {
         btnPw2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPw2 = saveCount(countPw2, "pw2");
-                switchOnClicked(btnPw2, countPw2);
+                if (countPw2 != 0) {
+                    countPw2 = saveCount(countPw2, "pw2");
+                    switchOnClicked(btnPw2, countPw2);
+                } else {
+                    switchOnClicked(btnPw2, countPw2);
+                    countPw2 = saveCount(countPw2, "pw2");
+                }
             }
         });
 
@@ -569,8 +745,13 @@ public class MainActivity extends AppCompatActivity {
         btnPdi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPdi = saveCount(countPdi, "pdi");
-                switchOnClicked(btnPdi, countPdi);
+                if (countPdi != 0) {
+                    countPdi = saveCount(countPdi, "pdi");
+                    switchOnClicked(btnPdi, countPdi);
+                } else {
+                    switchOnClicked(btnPdi, countPdi);
+                    countPdi = saveCount(countPdi, "pdi");
+                }
             }
         });
 
@@ -579,8 +760,13 @@ public class MainActivity extends AppCompatActivity {
         btnOm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countOm = saveCount(countOm, "om");
-                switchOnClicked(btnOm, countOm);
+                if (countOm != 0) {
+                    countOm = saveCount(countOm, "om");
+                    switchOnClicked(btnOm, countOm);
+                } else {
+                    switchOnClicked(btnOm, countOm);
+                    countOm = saveCount(countOm, "om");
+                }
             }
         });
 
@@ -600,8 +786,13 @@ public class MainActivity extends AppCompatActivity {
         btnPmm2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPmm2 = saveCount(countPmm2, "pmm2");
-                switchOnClicked(btnPmm2, countPmm2);
+                if (countPmm2 != 0) {
+                    countPmm2 = saveCount(countPmm2, "pmm2");
+                    switchOnClicked(btnPmm2, countPmm2);
+                } else {
+                    switchOnClicked(btnPmm2, countPmm2);
+                    countPmm2 = saveCount(countPmm2, "pmm2");
+                }
             }
         });
 
@@ -610,8 +801,13 @@ public class MainActivity extends AppCompatActivity {
         btnPractiques.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPractiques = saveCount(countPractiques, "practiques");
-                switchOnClicked(btnPractiques, countPractiques);
+                if (countPractiques != 0) {
+                    countPractiques = saveCount(countPractiques, "practiques");
+                    switchOnClicked(btnPractiques, countPractiques);
+                } else {
+                    switchOnClicked(btnPractiques, countPractiques);
+                    countPractiques = saveCount(countPractiques, "practiques");
+                }
             }
         });
 
@@ -620,8 +816,13 @@ public class MainActivity extends AppCompatActivity {
         btnPdap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPdap = saveCount(countPdap, "pdap");
-                switchOnClicked(btnPdap, countPdap);
+                if (countPdap != 0) {
+                    countPdap = saveCount(countPdap, "pdap");
+                    switchOnClicked(btnPdap, countPdap);
+                } else {
+                    switchOnClicked(btnPdap, countPdap);
+                    countPdap = saveCount(countPdap, "pdap");
+                }
             }
         });
 
@@ -630,8 +831,13 @@ public class MainActivity extends AppCompatActivity {
         btnIrv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countIrv = saveCount(countIrv, "irv");
-                switchOnClicked(btnIrv, countIrv);
+                if (countIrv != 0) {
+                    countIrv = saveCount(countIrv, "irv");
+                    switchOnClicked(btnIrv, countIrv);
+                } else {
+                    switchOnClicked(btnIrv, countIrv);
+                    countIrv = saveCount(countIrv, "irv");
+                }
             }
         });
 
@@ -640,8 +846,13 @@ public class MainActivity extends AppCompatActivity {
         btnTv_int.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countTv_int = saveCount(countTv_int, "tv_int");
-                switchOnClicked(btnTv_int, countTv_int);
+                if (countTv_int != 0) {
+                    countTv_int = saveCount(countTv_int, "tv_int");
+                    switchOnClicked(btnTv_int, countTv_int);
+                } else {
+                    switchOnClicked(btnTv_int, countTv_int);
+                    countTv_int = saveCount(countTv_int, "tv_int");
+                }
             }
         });
 
@@ -650,8 +861,13 @@ public class MainActivity extends AppCompatActivity {
         btnPm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPm = saveCount(countPm, "pm");
-                switchOnClicked(btnPm, countPm);
+                if (countPm != 0) {
+                    countPm = saveCount(countPm, "pm");
+                    switchOnClicked(btnPm, countPm);
+                } else {
+                    switchOnClicked(btnPm, countPm);
+                    countPm = saveCount(countPm, "pm");
+                }
             }
         });
 
@@ -660,8 +876,13 @@ public class MainActivity extends AppCompatActivity {
         btnTFG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countTFG = saveCount(countTFG, "tfg");
-                switchOnClicked(btnTFG, countTFG);
+                if (countTFG != 0) {
+                    countTFG = saveCount(countTFG, "tfg");
+                    switchOnClicked(btnTFG, countTFG);
+                } else {
+                    switchOnClicked(btnTFG, countTFG);
+                    countTFG = saveCount(countTFG, "tfg");
+                }
             }
         });
 
@@ -670,8 +891,13 @@ public class MainActivity extends AppCompatActivity {
         btnTtecn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countTtecn = saveCount(countTtecn, "ttecn");
-                switchOnClicked(btnTtecn, countTtecn);
+                if (countTtecn != 0) {
+                    countTtecn = saveCount(countTtecn, "ttecn");
+                    switchOnClicked(btnTtecn, countTtecn);
+                } else {
+                    switchOnClicked(btnTtecn, countTtecn);
+                    countTtecn = saveCount(countTtecn, "ttecn");
+                }
             }
         });
 
@@ -680,26 +906,36 @@ public class MainActivity extends AppCompatActivity {
         btnEntrepreneurship.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countEntrepreneurship = saveCount(countEntrepreneurship, "entrepreneurship");
-                switchOnClicked(btnEntrepreneurship, countEntrepreneurship);
+                if (countEntrepreneurship != 0) {
+                    countEntrepreneurship = saveCount(countEntrepreneurship, "entrepreneurship");
+                    switchOnClicked(btnEntrepreneurship, countEntrepreneurship);
+                } else {
+                    switchOnClicked(btnEntrepreneurship, countEntrepreneurship);
+                    countEntrepreneurship = saveCount(countEntrepreneurship, "entrepreneurship");
+                }
             }
         });
-
 
         btnPrpr1 = (Button) findViewById(R.id.prpr1);
         btnPrpr2 = (Button) findViewById(R.id.prpr2);
         btnMarketing = (Button) findViewById(R.id.marketing);
         btnMarketingSimu = (Button) findViewById(R.id.marketingsimulations);
         btn_iOS = (Button) findViewById(R.id.ios);
-        btnOther = (Button) findViewById(R.id.other);
+        btnPaed = (Button) findViewById(R.id.paed);
+        btnIntensiProg = (Button) findViewById(R.id.intensi_prog);
 
         countPrpr1 = getCount(countPrpr1, "prpr1");
         paintNoClick(btnPrpr1, countPrpr1);
         btnPrpr1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPrpr1 = saveCount(countPrpr1, "prpr1");
-                switchOnClicked(btnPrpr1, countPrpr1);
+                if (countPrpr1 != 0) {
+                    countPrpr1 = saveCount(countPrpr1, "prpr1");
+                    switchOnClicked(btnPrpr1, countPrpr1);
+                } else {
+                    switchOnClicked(btnPrpr1, countPrpr1);
+                    countPrpr1 = saveCount(countPrpr1, "prpr1");
+                }
             }
         });
 
@@ -708,8 +944,13 @@ public class MainActivity extends AppCompatActivity {
         btnPrpr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countPrpr2 = saveCount(countPrpr2, "prpr2");
-                switchOnClicked(btnPrpr2, countPrpr2);
+                if (countPrpr2 != 0) {
+                    countPrpr2 = saveCount(countPrpr2, "prpr2");
+                    switchOnClicked(btnPrpr2, countPrpr2);
+                } else {
+                    switchOnClicked(btnPrpr2, countPrpr2);
+                    countPrpr2 = saveCount(countPrpr2, "prpr2");
+                }
             }
         });
 
@@ -718,18 +959,28 @@ public class MainActivity extends AppCompatActivity {
         btnMarketing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countMarketing = saveCount(countMarketing, "marketing");
-                switchOnClicked(btnMarketing, countMarketing);
+                if (countMarketing != 0) {
+                    countMarketing = saveCount(countMarketing, "marketing");
+                    switchOnClicked(btnMarketing, countMarketing);
+                } else {
+                    switchOnClicked(btnMarketing, countMarketing);
+                    countMarketing = saveCount(countMarketing, "marketing");
+                }
             }
         });
 
-        countMarketingSimu = getCount(countMarketingSimu, "marketing");
+        countMarketingSimu = getCount(countMarketingSimu, "marketing_simu");
         paintNoClick(btnMarketingSimu, countMarketingSimu);
         btnMarketingSimu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countMarketingSimu = saveCount(countMarketingSimu, "marketing");
-                switchOnClicked(btnMarketingSimu, countMarketingSimu);
+                if (countMarketingSimu != 0) {
+                    countMarketingSimu = saveCount(countMarketingSimu, "marketing_simu");
+                    switchOnClicked(btnMarketingSimu, countMarketingSimu);
+                } else {
+                    switchOnClicked(btnMarketingSimu, countMarketingSimu);
+                    countMarketingSimu = saveCount(countMarketingSimu, "marketing_simu");
+                }
             }
         });
 
@@ -738,21 +989,168 @@ public class MainActivity extends AppCompatActivity {
         btn_iOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                count_iOS = saveCount(count_iOS, "ios");
-                switchOnClicked(btn_iOS, count_iOS);
+                if (count_iOS != 0) {
+                    count_iOS = saveCount(count_iOS, "ios");
+                    switchOnClicked(btn_iOS, count_iOS);
+                } else {
+                    switchOnClicked(btn_iOS, count_iOS);
+                    count_iOS = saveCount(count_iOS, "ios");
+                }
             }
         });
 
-        count_other = getCount(count_other, "other");
-        paintNoClick(btnOther, count_other);
-        btnOther.setOnClickListener(new View.OnClickListener() {
+        count_paed = getCount(count_paed, "paed");
+        paintNoClick(btnPaed, count_paed);
+        btnPaed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                count_other = saveCount(count_other, "other");
-                switchOnClicked(btnOther, count_other);
+                if (count_paed != 0) {
+                    count_paed = saveCount(count_paed, "paed");
+                    switchOnClicked(btnPaed, count_paed);
+                } else {
+                    switchOnClicked(btnPaed, count_paed);
+                    count_paed = saveCount(count_paed, "paed");
+                }
             }
         });
 
+        count_intensiProg = getCount(count_intensiProg, "paed");
+        paintNoClick(btnIntensiProg, count_intensiProg);
+        btnIntensiProg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count_intensiProg != 0) {
+                    count_intensiProg = saveCount(count_intensiProg, "paed");
+                    switchOnClicked(btnIntensiProg, count_intensiProg);
+                } else {
+                    switchOnClicked(btnIntensiProg, count_intensiProg);
+                    count_intensiProg = saveCount(count_intensiProg, "paed");
+                }
+            }
+        });
+
+        btnReset = (Button) findViewById(R.id.btnreset);
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                save.putInt("red", 0);
+                save.putInt("green", 0);
+                save.putInt("blue", 0);
+                save.apply();
+
+                tvRed.setText("" + 0 + "");
+                tvBlue.setText("" + 0 + "");
+                tvGreen.setText("" + 0 + "");
+
+                paintNoClick(btnCalcul, -1);
+                paintNoClick(btnElectro, -1);
+                paintNoClick(btnProg, -1);
+                paintNoClick(btnAlgebra, -1);
+                paintNoClick(btnIO, -1);
+                paintNoClick(btnBusiness, -1);
+                paintNoClick(btnDiu, -1);
+                paintNoClick(btnPic, -1);
+
+                paintNoClick(btnMates, -1);
+                paintNoClick(btnTrans, -1);
+                paintNoClick(btnDpoo, -1);
+                paintNoClick(btnBases, -1);
+                paintNoClick(btnDiu2, -1);
+                paintNoClick(btnLlenguatge, -1);
+                paintNoClick(btnAnimacio3d, -1);
+                paintNoClick(btnPic2, -1);
+                paintNoClick(btnValue, -1);
+                paintNoClick(btnGrafics3d, -1);
+                paintNoClick(btnFoto, -1);
+                paintNoClick(btnExpressio, -1);
+
+                paintNoClick(btnXarxes, -1);
+                paintNoClick(btnPmm1, -1);
+                paintNoClick(btnPic3, -1);
+                paintNoClick(btnTv, -1);
+                paintNoClick(btnPw1, -1);
+                paintNoClick(btnPds, -1);
+                paintNoClick(btnDramaturgia, -1);
+                paintNoClick(btnSimulaciofisica, -1);
+                paintNoClick(btnPw2, -1);
+                paintNoClick(btnPdi, -1);
+                paintNoClick(btnOm, -1);
+
+                paintNoClick(btnPmm2, -1);
+                paintNoClick(btnPractiques, -1);
+                paintNoClick(btnPdap, -1);
+                paintNoClick(btnIrv, -1);
+                paintNoClick(btnTv_int, -1);
+                paintNoClick(btnPm, -1);
+                paintNoClick(btnTFG, -1);
+                paintNoClick(btnTtecn, -1);
+                paintNoClick(btnEntrepreneurship, -1);
+
+                paintNoClick(btnPrpr1, -1);
+                paintNoClick(btnPrpr2, -1);
+                paintNoClick(btnMarketing, -1);
+                paintNoClick(btnMarketingSimu, -1);
+                paintNoClick(btn_iOS, -1);
+                paintNoClick(btnPaed, -1);
+                paintNoClick(btnIntensiProg, -1);
+
+                countCalcul = saveCount(-1, "calcul");
+                countElectro = saveCount(-1, "electro");
+                countProg = saveCount(-1, "prog");
+                countAlgebra = saveCount(-1, "algebra");
+                countIO = saveCount(-1, "io");
+                countBusiness = saveCount(-1, "business");
+                countDiu = saveCount(-1, "diu");
+                countPic = saveCount(-1, "pic");
+
+                countMates = saveCount(-1, "mates");
+                countTrans = saveCount(-1, "trans");
+                countDpoo = saveCount(-1, "dpoo");
+                countBases = saveCount(-1, "bases");
+                countDiu2 = saveCount(-1, "diu2");
+                countLlenguatge = saveCount(-1, "llenguatge");
+                countAnimacio3d = saveCount(-1, "animacio3d");
+                countPic2 = saveCount(-1, "pic2");
+                countValue = saveCount(-1, "value");
+                countGrafics3d = saveCount(-1, "grafics3d");
+                countFoto = saveCount(-1, "foto");
+                countExpressio = saveCount(-1, "expressio");
+
+                countXarxes = saveCount(-1, "xarxes");
+                countPmm1 = saveCount(-1, "pmm1");
+                countPic3 = saveCount(-1, "pic3");
+                countTv = saveCount(-1, "tv");
+                countPw1 = saveCount(-1, "pw1");
+                countPds = saveCount(-1, "pds");
+                countDramaturgia = saveCount(-1, "dramaturgia");
+                countSimulaciofisica = saveCount(-1, "simulaciofisica");
+                countPw2 = saveCount(-1, "pw2");
+                countPdi = saveCount(-1, "pdi");
+                countOm = saveCount(-1, "om");
+
+                countPmm2 = saveCount(-1, "pmm2");
+                countPractiques = saveCount(-1, "practiques");
+                countPdap = saveCount(-1, "pdap");
+                countIrv = saveCount(-1, "irv");
+                countTv_int = saveCount(-1, "tv_int");
+                countPm = saveCount(-1, "pm");
+                countTFG = saveCount(-1, "tfg");
+                countTtecn = saveCount(-1, "ttecn");
+                countEntrepreneurship = saveCount(-1, "entrepreneurship");
+
+                countPrpr1 = saveCount(-1, "prpr1");
+                countPrpr2 = saveCount(-1, "prpr2");
+                countMarketing = saveCount(-1, "marketing");
+                countMarketingSimu = saveCount(-1, "marketing_simu");
+                count_iOS = saveCount(-1, "ios");
+                count_paed = saveCount(-1, "paed");
+                count_intensiProg = saveCount(-1, "intensi_prog");
+
+                numBlue = 0;
+                numGreen = 0;
+                numRed = 0;
+            }
+        });
     }
 }
 
