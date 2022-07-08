@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
     int countMarketingSimu;
     int count_iOS;
     int count_paed;
-    int count_intensiProg;
+    int count_eBusiness;
+    //int count_intensiProg;
 
     // Primer
     private Button btnCalcul;
@@ -154,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMarketingSimu;
     private Button btn_iOS;
     private Button btnPaed;
-    private Button btnIntensiProg;
+    private Button btnEBusiness;
+    //private Button btnIntensiProg;
 
     public int saveCount(int counter, String btnName) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -922,7 +924,8 @@ public class MainActivity extends AppCompatActivity {
         btnMarketingSimu = (Button) findViewById(R.id.marketingsimulations);
         btn_iOS = (Button) findViewById(R.id.ios);
         btnPaed = (Button) findViewById(R.id.paed);
-        btnIntensiProg = (Button) findViewById(R.id.intensi_prog);
+        btnEBusiness = (Button) findViewById(R.id.e_business);
+        //btnIntensiProg = (Button) findViewById(R.id.intensi_prog);
 
         countPrpr1 = getCount(countPrpr1, "prpr1");
         paintNoClick(btnPrpr1, countPrpr1);
@@ -1014,7 +1017,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        count_intensiProg = getCount(count_intensiProg, "paed");
+        count_eBusiness = getCount(count_eBusiness, "e_business");
+        paintNoClick(btnEBusiness, count_eBusiness);
+        btnEBusiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count_eBusiness != 0) {
+                    count_eBusiness = saveCount(count_eBusiness, "e_business");
+                    switchOnClicked(btnEBusiness, count_eBusiness);
+                } else {
+                    switchOnClicked(btnEBusiness, count_eBusiness);
+                    count_eBusiness = saveCount(count_eBusiness, "e_business");
+                }
+            }
+        });
+
+        /*count_intensiProg = getCount(count_intensiProg, "paed"); //todo paed esta mal
         paintNoClick(btnIntensiProg, count_intensiProg);
         btnIntensiProg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1027,7 +1045,7 @@ public class MainActivity extends AppCompatActivity {
                     count_intensiProg = saveCount(count_intensiProg, "paed");
                 }
             }
-        });
+        });*/
 
         btnReset = (Button) findViewById(R.id.btnreset);
         btnReset.setOnClickListener(new View.OnClickListener() {
@@ -1092,7 +1110,8 @@ public class MainActivity extends AppCompatActivity {
                 paintNoClick(btnMarketingSimu, -1);
                 paintNoClick(btn_iOS, -1);
                 paintNoClick(btnPaed, -1);
-                paintNoClick(btnIntensiProg, -1);
+                paintNoClick(btnEBusiness, -1);
+                //paintNoClick(btnIntensiProg, -1);
 
                 countCalcul = saveCount(-1, "calcul");
                 countElectro = saveCount(-1, "electro");
@@ -1144,7 +1163,8 @@ public class MainActivity extends AppCompatActivity {
                 countMarketingSimu = saveCount(-1, "marketing_simu");
                 count_iOS = saveCount(-1, "ios");
                 count_paed = saveCount(-1, "paed");
-                count_intensiProg = saveCount(-1, "intensi_prog");
+                count_eBusiness = saveCount(-1, "e_business");
+                //count_intensiProg = saveCount(-1, "intensi_prog");
 
                 numBlue = 0;
                 numGreen = 0;
